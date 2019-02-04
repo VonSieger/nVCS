@@ -37,11 +37,14 @@ class FileSystem:
         return allFiles
 
     def readFile(self, path):
+        print(path)
         textAsToken = list()
-        with open(self.absPath(path), "r") as file:
+        try:
+            file = open(self.absPath(path), "r")
             for line in file:
                 textAsToken.append(TextToken(line))
-
+        except UnicodeDecodeError as uniError:
+            return None
         return textAsToken
 
     def remove(self, relPath):

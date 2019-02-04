@@ -80,10 +80,11 @@ class FileToken(Token):
         self.content = relativePath
         self.fileSystem = fileSystem
         tokens = fileSystem.readFile(relativePath)
-        md5HashGenerator = md5()
-        for token in tokens:
-            md5HashGenerator.update(bytes(token.content, "utf-8"))
-        self.hashInt = bytesToInt(md5HashGenerator.digest())
+        if(tokens is not None):
+            md5HashGenerator = md5()
+            for token in tokens:
+                md5HashGenerator.update(bytes(token.content, "utf-8"))
+            self.hashInt = bytesToInt(md5HashGenerator.digest())
 
 #    def __eq__(self, obj):
 #        if super().__eq__(obj):
@@ -91,8 +92,6 @@ class FileToken(Token):
 #        return False
 
     def compare(self, local, other):
-        print(local)
-        print(other)
         if isinstance(local, Addition):
             if isinstance(other, Addition):
                 if(other == local):

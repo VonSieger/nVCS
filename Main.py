@@ -150,6 +150,9 @@ if __name__ == "__main__":
         otherTokenList = otherDir.readFile(filePath.content)
         baseTokenList = baseDir.readFile(filePath.content)
 
+        if(localTokenList is None or otherTokenList is None or baseTokenList is None):
+            continue
+
         if localTokenList == otherTokenList:
             if otherTokenList == baseTokenList:
                 continue
