@@ -115,9 +115,7 @@ if __name__ == "__main__":
     dirResult = threeWayMerge(localDir.readDir(exclude=hiddenDirName), otherDir.readDir(), baseDir.readDir())
     for result in dirResult:
         if isinstance(result, Token):
-            continue
-        elif (result.token.binary):
-            continue
+            pass
         elif isinstance(result, Conflict):
             print("There is a error for these two files:")
             print("\t(1)" + result.tokenLocal.content)
@@ -156,9 +154,6 @@ if __name__ == "__main__":
         localTokenList = localDir.readFile(filePath.content)
         otherTokenList = otherDir.readFile(filePath.content)
         baseTokenList = baseDir.readFile(filePath.content)
-
-        if(localTokenList is None or otherTokenList is None or baseTokenList is None):
-            continue
 
         if localTokenList == otherTokenList:
             if otherTokenList == baseTokenList:
