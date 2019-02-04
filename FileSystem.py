@@ -37,7 +37,6 @@ class FileSystem:
         return allFiles
 
     def readFile(self, path):
-        print(path)
         textAsToken = list()
         try:
             file = open(self.absPath(path), "r")

@@ -94,7 +94,6 @@ def initialize(targetPath):
 def commonList(listA, listB, key=lambda obj: obj):
     setA = set(listA)
     setB = set(listB)
-
     return list(setA & setB)
 
 if __name__ == "__main__":
@@ -151,7 +150,7 @@ if __name__ == "__main__":
                 baseDir.remove(token.content)
 
     #remove files, which were not copied before
-    filePaths = commonList(localDir.readDir(exclude=hiddenDirName), otherDir.readDir())
+    filePaths = commonList(localDir.readDir(exclude=hiddenDirName), otherDir.readDir(), key=lambda token:token.content)
 
     for filePath in filePaths:
         localTokenList = localDir.readFile(filePath.content)
@@ -171,12 +170,14 @@ if __name__ == "__main__":
             for token in merged:
                 if isinstance(token, Conflict):
                     ## TODO: improve Conflict handling
-                    print("There is a merge conflict in the file " + filePath)
-                    print("Absolute paths:\n\t(1) " + localDir.absPath(filePath) + "\n\t(2) " + otherDir.absPath(filePath))
-                    continue
-            localDir.write(filePath.content, merged)
-            otherDir.write(filePath.content, merged)
-            baseDir.write(filePath.content, merged)
+                    conflict = token
+                    print("There is a merge conflict in the file " + str(filePath.content))
+                    print("Absolute paths:\n\t(1) " + localDir.absPath(filePath.content) + "\n\t(2) " + otherDir.absPath(filePath.content))
+                    break
+            else: #only commit changes, if there is no conflict
+                localDir.write(filePath.content, merged)
+                otherDir.write(filePath.content, merged)
+                baseDir.write(filePath.content, merged)
 
 
 def copy(srcFileSystem, dstFileSystem, relPath):

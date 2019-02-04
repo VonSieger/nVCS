@@ -90,7 +90,7 @@ class FileToken(Token):
             self.binary = True
     def __hash__(self):
         md5HashGenerator = md5()
-        md5HashGenerator.update(bytes(self.fileSystem.absPath(self.content), "utf-8"))
+        md5HashGenerator.update(bytes(self.content, "utf-8"))
         return bytesToInt(md5HashGenerator.digest())
 
 #    def __eq__(self, obj):
