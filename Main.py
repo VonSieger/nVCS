@@ -91,6 +91,11 @@ def initialize(targetPath):
     configToken = TextToken(CONFIG_TEXT.replace("<target_dir>", targetPath))
     tmpFileSystem.write(path.join(hiddenDirName, "config"), [configToken])
 
+def commonList(listA, listB, key=lambda obj: obj):
+    setA = set(listA)
+    setB = set(listB)
+
+    return list(setA & setB)
 
 if __name__ == "__main__":
     try:
@@ -111,7 +116,9 @@ if __name__ == "__main__":
     dirResult = threeWayMerge(localDir.readDir(exclude=hiddenDirName), otherDir.readDir(), baseDir.readDir())
     for result in dirResult:
         if isinstance(result, Token):
-            pass
+            continue
+        elif (result.token.binary):
+            continue
         elif isinstance(result, Conflict):
             print("There is a error for these two files:")
             print("\t(1)" + result.tokenLocal.content)
@@ -143,7 +150,8 @@ if __name__ == "__main__":
                 otherDir.remove(token.content)
                 baseDir.remove(token.content)
 
-    filePaths = localDir.readDir(exclude=hiddenDirName)
+    #remove files, which were not copied before
+    filePaths = commonList(localDir.readDir(exclude=hiddenDirName), otherDir.readDir())
 
     for filePath in filePaths:
         localTokenList = localDir.readFile(filePath.content)
